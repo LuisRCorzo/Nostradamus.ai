@@ -1,0 +1,19 @@
+{
+    "name": "app-proto",
+    "version": "1.0.6",
+    "description": "appdata",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/LuisRCorzo/Nostradamus.ai"
+    },
+    "bugs": {
+        "url": "https://github.com/LuisRCorzo/Nostradamus.ai/issues",
+        "email": "support@appseed.us"
+    },
+    "author": "LuisRCorzo AaronEhrlich",
+    "engines": {
+        "node": ">=10.0.0"
+    },
+    "dependencies": {},
+    "devDependencies": {}
+}
