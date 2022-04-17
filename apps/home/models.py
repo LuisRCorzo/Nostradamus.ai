@@ -299,22 +299,21 @@ def get_crypto():
 def get_eth_data():
 
     eth=ETH.query.all()
-    eth=pd.DataFrame(ETH.toDICT(eth))
-    eth_close = eth[['close']]
-    
+    eth = ETH.toDICT(eth)['close']
+    # rint(eth)p
 
     eth_pred=ETH_forecasts.query.all()
-    eth_pred=pd.DataFrame(ETH_forecasts.toDICT(eth_pred))
-    eth_pred=eth_pred[['close']]
+    # eth_pred=pd.DataFrame(ETH_forecasts.toDICT(eth_pred))
+    # eth_pred=eth_pred[['close']]
 
-    print(eth_close)
+    # print(eth_close)
 
-    print(eth_pred,'\n')
+    # print(eth_pred,'\n')
 
-
-    actual = pd.concat([eth_close, eth_pred], axis=0)
     
-    return actual
+    # to_plot = pd.concat([eth_close, eth_pred], axis=0)
+    
+    return eth,json.dumps(ETH.toDICT(eth_pred))
 
 
 def get_predictions(df):

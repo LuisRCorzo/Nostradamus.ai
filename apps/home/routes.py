@@ -16,9 +16,10 @@ from jinja2 import TemplateNotFound
 def index():
 
     eth_data = get_eth_data()
+    # print(eth_data[1])
     end = len(eth_data)
-    data_plot = eth_data.iloc[end-60:,]
-    return render_template('home/home_v1.html', segment='index',data=eth_data)
+    # data_plot = eth_data.iloc[end-60:,]
+    return render_template('home/home_v1.html', segment='index',data_eth_pred=eth_data[1],data_eth_act=eth_data[0])
 
 @blueprint.route('/<template>')
 @login_required
