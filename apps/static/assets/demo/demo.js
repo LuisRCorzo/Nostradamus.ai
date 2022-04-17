@@ -33,7 +33,7 @@ demo = {
         yPadding: 10,
         caretPadding: 10
       },
-      responsive: false,
+      responsive: true,
       scales: {
         yAxes: [{
           display: 0,
@@ -157,7 +157,7 @@ demo = {
     };
 
     gradientChartOptionsConfigurationWithTooltipPurple = {
-      maintainAspectRatio: true,
+      maintainAspectRatio: false,
       legend: {
         display: false
       },
@@ -342,10 +342,10 @@ demo = {
         borderDashOffset: 0.0,
         pointBackgroundColor: '#d048b6',
         pointBorderColor: 'rgba(255,255,255,0)',
-        // pointHoverBackgroundColor: '#d048b6',
+        pointHoverBackgroundColor: '#d048b6',
         pointBorderWidth: 20,
-        // pointHoverRadius: 4,
-        // pointHoverBorderWidth: 15,
+        pointHoverRadius: 4,
+        pointHoverBorderWidth: 15,
         pointRadius: 4,
         data: dataEth,
         
