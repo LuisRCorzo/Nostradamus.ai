@@ -389,7 +389,7 @@ demo = {
       var dataEth = {
         labels:chart_labels,
         datasets: [{
-          label: "dataEthAct",
+          label: "Prediction",
           fill: true,
           backgroundColor: gradientStroke,
           borderColor: '#d048b6',
@@ -403,11 +403,11 @@ demo = {
           pointHoverRadius: 4,
           pointHoverBorderWidth: 15,
           pointRadius: 4,
-          data: eth_act_dataset 
+          data:eth_pred_dataset  
           
           }
         ,{
-          label: "dataA",
+          label: "Actual",
           fill: true,
           backgroundColor: gradientStroke,
           borderColor: '#45b1e8 ',
@@ -421,53 +421,13 @@ demo = {
           pointHoverRadius: 4,
           pointHoverBorderWidth: 15,
           pointRadius: 4,
-          data: eth_pred_dataset
+          data: eth_act_dataset
           
          }
       ]
         
       };
-      // var dataBtc = {
-      //   labels:chart_labels,
-      //   datasets: [{
-      //     label: "dataBtcAct",
-      //     fill: true,
-      //     backgroundColor: gradientStroke,
-      //     borderColor: '#d048b6',
-      //     borderWidth: 2,
-      //     borderDash: [],
-      //     borderDashOffset: 0.0,
-      //     pointBackgroundColor: '#d048b6',
-      //     pointBorderColor: 'rgba(255,255,255,0)',
-      //     pointHoverBackgroundColor: '#d048b6',
-      //     pointBorderWidth: 20,
-      //     pointHoverRadius: 4,
-      //     pointHoverBorderWidth: 15,
-      //     pointRadius: 4,
-      //     data: btc_act_dataset 
-          
-      //     }
-      //   ,{
-      //     label: "dataA",
-      //     fill: true,
-      //     backgroundColor: gradientStroke,
-      //     borderColor: '#45b1e8 ',
-      //     borderWidth: 2,
-      //     borderDash: [],
-      //     borderDashOffset: 0.0,
-      //     pointBackgroundColor: '#45b1e8 ',
-      //     pointBorderColor: 'rgba(72,72,176,0.2)',
-      //     pointHoverBackgroundColor: '#45b1e8 ',
-      //     pointBorderWidth: 20,
-      //     pointHoverRadius: 4,
-      //     pointHoverBorderWidth: 15,
-      //     pointRadius: 4,
-      //     data: btc_pred_dataset
-          
-      //    }
-      // ]
-        
-      // };
+ 
 
     gradientStroke.addColorStop(1, 'rgba(72,72,176,0.1)');
     gradientStroke.addColorStop(0.4, 'rgba(72,72,176,0.0)');
@@ -487,6 +447,8 @@ demo = {
       data.datasets[1].data = eth_act_dataset;
       data.labels = chart_labels;
       predictions.update();
+      document.getElementById('cryptoNameForcase').innerHTML="Ethereum"
+
     });
     $("#1").click(function() {
       var data = predictions.config.data;
@@ -494,6 +456,9 @@ demo = {
       data.datasets[1].data = btc_act_dataset;
       data.labels = chart_labels;
       predictions.update();
+      document.getElementById('cryptoNameForcase').innerHTML="Bitcoin"
+
+
     });
 
     $("#2").click(function() {
@@ -502,12 +467,172 @@ demo = {
       data.datasets[1].data = xmr_act_dataset;
       data.labels = chart_labels;
       predictions.update();
+      document.getElementById('cryptoNameForcase').innerHTML="Monero"
+
     });
 
+  const symbols =["BTC","ETH","XMR"]
+  fetch("https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,XMR,LUNA,XRP,SOL,BNB,TRX&tsyms=USD&api_key={ea0232c4ea8a3007655f1518de6af8ea6c4a5e546ddf83988ec885db9600a11e}")
+    .then(response => response.json())
+    .then(data => data.DISPLAY)
+    .then(data => {
+      let table = document.getElementById("DailyChart")
+      let row = table.insertRow(0);
+      let symbol = row.insertCell(0)
+      symbol.innerHTML = data.BTC.USD.FROMSYMBOL
+      let price = row.insertCell(1)
+      price.innerHTML = data.BTC.USD.PRICE
+      let change = row.insertCell(2)
+      change.innerHTML = data.BTC.USD.CHANGEDAY
+      let perct_change = row.insertCell(3)
+      perct_change.innerHTML = data.BTC.USD.CHANGEPCTDAY
+      let open = row.insertCell(4)
+      open.innerHTML = data.BTC.USD.OPENDAY
+      let high = row.insertCell(5)
+      high.innerHTML = data.BTC.USD.HIGHDAY
+      let low = row.insertCell(6)
+      low.innerHTML = data.BTC.USD.LOWDAY
+      let volume = row.insertCell(7)
+      volume.innerHTML = data.BTC.USD.VOLUMEDAY
+
+      row = table.insertRow(1)
+      symbol = row.insertCell(0)
+      symbol.innerHTML = data.ETH.USD.FROMSYMBOL
+      price = row.insertCell(1)
+      price.innerHTML = data.ETH.USD.PRICE
+      change = row.insertCell(2)
+      change.innerHTML = data.ETH.USD.CHANGEDAY
+      perct_change = row.insertCell(3)
+      perct_change.innerHTML = data.ETH.USD.CHANGEPCTDAY
+      open = row.insertCell(4)
+      open.innerHTML = data.ETH.USD.OPENDAY
+      high = row.insertCell(5)
+      high.innerHTML = data.ETH.USD.HIGHDAY
+      low = row.insertCell(6)
+      low.innerHTML = data.ETH.USD.LOWDAY
+      volume = row.insertCell(7)
+      volume.innerHTML = data.ETH.USD.VOLUMEDAY
+
+      row = table.insertRow(2)
+      symbol = row.insertCell(0)
+      symbol.innerHTML = data.XMR.USD.FROMSYMBOL
+      price = row.insertCell(1)
+      price.innerHTML = data.XMR.USD.PRICE
+      change = row.insertCell(2)
+      change.innerHTML = data.XMR.USD.CHANGEDAY
+      perct_change = row.insertCell(3)
+      perct_change.innerHTML = data.XMR.USD.CHANGEPCTDAY
+      open = row.insertCell(4)
+      open.innerHTML = data.XMR.USD.OPENDAY
+      high = row.insertCell(5)
+      high.innerHTML = data.XMR.USD.HIGHDAY
+      low = row.insertCell(6)
+      low.innerHTML = data.XMR.USD.LOWDAY
+      volume = row.insertCell(7)
+      volume.innerHTML = data.XMR.USD.VOLUMEDAY
+
+      row = table.insertRow(3)
+      symbol = row.insertCell(0)
+      symbol.innerHTML = data.LUNA.USD.FROMSYMBOL
+      price = row.insertCell(1)
+      price.innerHTML = data.LUNA.USD.PRICE
+      change = row.insertCell(2)
+      change.innerHTML = data.LUNA.USD.CHANGEDAY
+      perct_change = row.insertCell(3)
+      perct_change.innerHTML = data.LUNA.USD.CHANGEPCTDAY
+      open = row.insertCell(4)
+      open.innerHTML = data.LUNA.USD.OPENDAY
+      high = row.insertCell(5)
+      high.innerHTML = data.LUNA.USD.HIGHDAY
+      low = row.insertCell(6)
+      low.innerHTML = data.LUNA.USD.LOWDAY
+      volume = row.insertCell(7)
+      volume.innerHTML = data.LUNA.USD.VOLUMEDAY
+
+      row = table.insertRow(4)
+      symbol = row.insertCell(0)
+      symbol.innerHTML = data.XRP.USD.FROMSYMBOL
+      price = row.insertCell(1)
+      price.innerHTML = data.XRP.USD.PRICE
+      change = row.insertCell(2)
+      change.innerHTML = data.XRP.USD.CHANGEDAY
+      perct_change = row.insertCell(3)
+      perct_change.innerHTML = data.XRP.USD.CHANGEPCTDAY
+      open = row.insertCell(4)
+      open.innerHTML = data.XRP.USD.OPENDAY
+      high = row.insertCell(5)
+      high.innerHTML = data.XRP.USD.HIGHDAY
+      low = row.insertCell(6)
+      low.innerHTML = data.XRP.USD.LOWDAY
+      volume = row.insertCell(7)
+      volume.innerHTML = data.XRP.USD.VOLUMEDAY
+
+      row = table.insertRow(5)
+      symbol = row.insertCell(0)
+      symbol.innerHTML = data.SOL.USD.FROMSYMBOL
+      price = row.insertCell(1)
+      price.innerHTML = data.SOL.USD.PRICE
+      change = row.insertCell(2)
+      change.innerHTML = data.SOL.USD.CHANGEDAY
+      perct_change = row.insertCell(3)
+      perct_change.innerHTML = data.SOL.USD.CHANGEPCTDAY
+      open = row.insertCell(4)
+      open.innerHTML = data.SOL.USD.OPENDAY
+      high = row.insertCell(5)
+      high.innerHTML = data.SOL.USD.HIGHDAY
+      low = row.insertCell(6)
+      low.innerHTML = data.SOL.USD.LOWDAY
+      volume = row.insertCell(7)
+      volume.innerHTML = data.SOL.USD.VOLUMEDAY
+
+      row = table.insertRow(6)
+      symbol = row.insertCell(0)
+      symbol.innerHTML = data.BNB.USD.FROMSYMBOL
+      price = row.insertCell(1)
+      price.innerHTML = data.BNB.USD.PRICE
+      change = row.insertCell(2)
+      change.innerHTML = data.BNB.USD.CHANGEDAY
+      perct_change = row.insertCell(3)
+      perct_change.innerHTML = data.BNB.USD.CHANGEPCTDAY
+      open = row.insertCell(4)
+      open.innerHTML = data.BNB.USD.OPENDAY
+      high = row.insertCell(5)
+      high.innerHTML = data.BNB.USD.HIGHDAY
+      low = row.insertCell(6)
+      low.innerHTML = data.BNB.USD.LOWDAY
+      volume = row.insertCell(7)
+      volume.innerHTML = data.BNB.USD.VOLUMEDAY
+
+      row = table.insertRow(7)
+      symbol = row.insertCell(0)
+      symbol.innerHTML = data.TRX.USD.FROMSYMBOL
+      price = row.insertCell(1)
+      price.innerHTML = data.TRX.USD.PRICE
+      change = row.insertCell(2)
+      change.innerHTML = data.TRX.USD.CHANGEDAY
+      perct_change = row.insertCell(3)
+      perct_change.innerHTML = data.TRX.USD.CHANGEPCTDAY
+      open = row.insertCell(4)
+      open.innerHTML = data.TRX.USD.OPENDAY
+      high = row.insertCell(5)
+      high.innerHTML = data.TRX.USD.HIGHDAY
+      low = row.insertCell(6)
+      low.innerHTML = data.TRX.USD.LOWDAY
+      volume = row.insertCell(7)
+      volume.innerHTML = data.TRX.USD.VOLUMEDAY
+
+      
+    })
+
+
+
+       
+       
+      
 
   },
 
-
+  
   showNotification: function(from, align) {
     color = Math.floor((Math.random() * 4) + 1);
 
@@ -526,3 +651,4 @@ demo = {
   }
 
 };
+

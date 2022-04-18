@@ -174,7 +174,7 @@
                     <div class="row">
                     <div class="col-sm-6 text-left">
                         <h5 class="card-category">14-day forecast</h5>
-                        <h2 class="card-title">Crypto-Name</h2>
+                        <h2 class="card-title" id="cryptoNameForcase">Ethereum</h2>
                     </div>
                     <div class="col-sm-6">
                         <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
@@ -228,7 +228,7 @@
             <div class="col-md-12">
                 <div class="card card-plain">
                 <div class="card-header">
-                    <h4 class="card-title"> Historical Data </h4>
+                    <h4 class="card-title"> Daily Data </h4>
                 </div>
                 <div class="card-body">
                     <div class="table-full-width table-responsive ps ps--active-y">
@@ -238,7 +238,16 @@
 
                         <tr>
                             <th class="text-center">
-                            Date 
+                            Symbol 
+                            </th>
+                            <th class="text-center">
+                            Price
+                            </th>
+                            <th class="text-center">
+                            Change
+                            </th>
+                            <th class="text-center">
+                            % Change
                             </th>
                             <th class="text-center">
                             Open
@@ -250,37 +259,13 @@
                             Low
                             </th>
                             <th class="text-center">
-                            Close
-                            </th>
-                            <th class="text-center">
                             Volume
                             </th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="DailyChart">
                         
-                        {% for row in data %}
-                            <tr>
-                                <td>
-                                    {{row.date}}
-                                </td>
-                                <td class="text-center">
-                                    {{row.open}}
-                                </td>
-                                <td class="text-center">
-                                    {{row.high}}
-                                </td>
-                                <td class="text-center">
-                                    {{row.low}}
-                                </td>
-                                <td class="text-center">
-                                    {{row.close}}
-                                </td>
-                                <td class="text-center">
-                                    {{row.volume}}
-                                </td>
-                            </tr>
-                        {% endfor %}
+                        
                         
                         </tbody>
                     </table>
