@@ -4,7 +4,7 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 from apps.home import blueprint
-from apps.home.models import get_eth_data
+from apps.home.models import get_eth_data,get_btc_data,get_xmr_data
 from flask import render_template, request
 from flask_login import login_required
 from jinja2 import TemplateNotFound
@@ -16,10 +16,18 @@ from jinja2 import TemplateNotFound
 def index():
 
     eth_data = get_eth_data()
+    btc_data = get_btc_data()
+    xmr_data = get_xmr_data()
+
     # print(eth_data[1])
     end = len(eth_data)
     # data_plot = eth_data.iloc[end-60:,]
-    return render_template('home/home_v1.html', segment='index',data_eth_pred=eth_data[1],data_eth_act=eth_data[0])
+    return render_template('home/home_v1.html', segment='index',
+                           data_eth_pred=eth_data[1],data_eth_act=eth_data[0],
+                           data_btc_pred=btc_data[1],data_btc_act=btc_data[0],
+                           data_xmr_pred=xmr_data[1],data_xmr_act=xmr_data[0]
+                           )
+                           
 
 @blueprint.route('/<template>')
 @login_required

@@ -299,22 +299,101 @@ def get_crypto():
 def get_eth_data():
 
     eth=ETH.query.all()
-    eth = ETH.toDICT(eth)['close']
-    # rint(eth)p
-
     eth_pred=ETH_forecasts.query.all()
-    # eth_pred=pd.DataFrame(ETH_forecasts.toDICT(eth_pred))
-    # eth_pred=eth_pred[['close']]
 
-    # print(eth_close)
 
-    # print(eth_pred,'\n')
+    eth_df = pd.DataFrame(ETH.toDICT(eth))
+    start = len(eth_df)-100
+
+    eth_df = eth_df[['close']]
+    eth_actual = (eth_df.iloc[start:,].values.ravel()).tolist()
+
+    idx_actual = [i for i in range(0, len(eth_actual))]
+    json_actuals = []
+
+    for actual,idx in zip(eth_actual, idx_actual):
+
+        json_actuals.append({'x': idx, 'y': actual })
+    
+    
+    
+    idx_pred = [i for i in range(len(eth_actual), len(eth_actual)+len(eth_pred))]
+    json_preds = []
+    json_preds.append(json_actuals[-1])
+    
+
+    for pred,idx in zip(eth_pred, idx_pred):
+
+        json_preds.append({'x':idx ,'y':pred.close })
 
     
-    # to_plot = pd.concat([eth_close, eth_pred], axis=0)
-    
-    return eth,json.dumps(ETH.toDICT(eth_pred))
+    return json.dumps(json_actuals),json.dumps(json_preds)
 
+def get_btc_data():
+
+    btc=BTC.query.all()
+    btc_pred=BTC_forecasts.query.all()
+
+
+    btc_df = pd.DataFrame(BTC.toDICT(btc))
+    start = len(btc_df)-100
+
+    btc_df = btc_df[['close']]
+    btc_actual = (btc_df.iloc[start:,].values.ravel()).tolist()
+
+    idx_actual = [i for i in range(0, len(btc_actual))]
+    json_actuals = []
+
+    for actual,idx in zip(btc_actual, idx_actual):
+
+        json_actuals.append({'x': idx, 'y': actual })
+    
+    
+    
+    idx_pred = [i for i in range(len(btc_actual), len(btc_actual)+len(btc_pred))]
+    json_preds = []
+    json_preds.append(json_actuals[-1])
+    
+
+    for pred,idx in zip(btc_pred, idx_pred):
+
+        json_preds.append({'x':idx ,'y':pred.close })
+
+    print(json_preds)
+    return json.dumps(json_actuals),json.dumps(json_preds)
+
+def get_xmr_data():
+
+    xmr=XMR.query.all()
+    xmr_pred=XMR_forecasts.query.all()
+
+
+    xmr_df = pd.DataFrame(XMR.toDICT(xmr))
+    start = len(xmr_df)-100
+
+    xmr_df = xmr_df[['close']]
+    xmr_actual = (xmr_df.iloc[start:,].values.ravel()).tolist()
+
+    idx_actual = [i for i in range(0, len(xmr_actual))]
+    json_actuals = []
+
+    for actual,idx in zip(xmr_actual, idx_actual):
+
+        json_actuals.append({'x': idx, 'y': actual })
+    
+    
+    
+    idx_pred = [i for i in range(len(xmr_actual), len(xmr_actual)+len(xmr_pred))]
+    json_preds = []
+    json_preds.append(json_actuals[-1])
+    
+
+    for pred,idx in zip(xmr_pred, idx_pred):
+
+        json_preds.append({'x':idx ,'y':pred.close })
+
+    print(json_preds)
+    return json.dumps(json_actuals),json.dumps(json_preds)
 
 def get_predictions(df):
 

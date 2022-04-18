@@ -134,7 +134,8 @@ demo = {
             zeroLineColor: "transparent",
           },
           ticks: {
-            suggestedMin: 60,
+            suggestedMin: 50000
+            ,
             suggestedMax: 125,
             padding: 20,
             fontColor: "#2380f7"
@@ -182,7 +183,7 @@ demo = {
             zeroLineColor: "transparent",
           },
           ticks: {
-            suggestedMin: 3500,
+            suggestedMin: 50000,
             suggestedMax: 125,
             padding: 20,
             fontColor: "#9a9a9a"
@@ -230,7 +231,7 @@ demo = {
             zeroLineColor: "transparent",
           },
           ticks: {
-            suggestedMin: 50,
+            suggestedMin: 50000,
             suggestedMax: 110,
             padding: 20,
             fontColor: "#ff8a76"
@@ -278,7 +279,7 @@ demo = {
             zeroLineColor: "transparent",
           },
           ticks: {
-            suggestedMin: 50,
+            suggestedMin: 50000,
             suggestedMax: 125,
             padding: 20,
             fontColor: "#9e9e9e"
@@ -300,64 +301,28 @@ demo = {
       }
     };
 
-    const getDatesBetweenDates = (startDate, endDate) => {
-      let dates = []
-      //to avoid modifying the original date
-      const theDate = new Date(startDate)
-      while (theDate < endDate) {
-        var Data=new Date(theDate)
-        Data = Data.getMonth()+1+"/"+Data.getDate()
-        dates = [...dates, Data]
-        theDate.setDate(theDate.getDate() + 1)
-      }
-      return dates
-    }
-    const today = new Date()
-    const sixtydays = new Date(today)
-    sixtydays.setDate(sixtydays.getDate() + 60)
+   
+  
+ 
 
-    var x_Dates=getDatesBetweenDates(today, sixtydays)
+    // var ctx = document.getElementById("chartBig1").getContext("2d");
+
+    // var gradientStroke = ctx.createLinearGradient(0, 230, 0, 1000);
+
+    // gradientStroke.addColorStop(1, 'rgba(72,72,176,0.2)');
+    // gradientStroke.addColorStop(0.2, 'rgba(72,72,176,0.0)');
+    // gradientStroke.addColorStop(0, 'rgba(119,52,169,0)'); //purple colors
+
+    
+
+   
 
 
-    var ctx = document.getElementById("chartBig1").getContext("2d");
-
-    var gradientStroke = ctx.createLinearGradient(0, 230, 0, 1000);
-
-    gradientStroke.addColorStop(1, 'rgba(72,72,176,0.2)');
-    gradientStroke.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-    gradientStroke.addColorStop(0, 'rgba(119,52,169,0)'); //purple colors
-
-    var dataEth = JSON.parse(document.getElementById("ethDataPred").dataset.gecode)['close'];
-    var dataEthAct = JSON.parse(document.getElementById("ethDataAct").dataset.gecode);
-    // console.log(dataEth);
-    var data = {
-      labels: x_Dates,
-      datasets: [{
-        label: "Data",
-        fill: true,
-        backgroundColor: gradientStroke,
-        borderColor: '#d048b6',
-        borderWidth: 2,
-        borderDash: [],
-        borderDashOffset: 0.0,
-        pointBackgroundColor: '#d048b6',
-        pointBorderColor: 'rgba(255,255,255,0)',
-        pointHoverBackgroundColor: '#d048b6',
-        pointBorderWidth: 20,
-        pointHoverRadius: 4,
-        pointHoverBorderWidth: 15,
-        pointRadius: 4,
-        data: dataEth,
-        
-      }],
-      
-    };
-
-    var myChart = new Chart(ctx, {
-      type: 'line',
-      data: data,
-      options: gradientChartOptionsConfigurationWithTooltipPurple
-    });
+    // var myChart = new Chart(ctx, {
+    //   type: 'line',
+    //   data: data,
+    //   options: gradientChartOptionsConfigurationWithTooltipPurple
+    // });
 
 
     // var ctxGreen = document.getElementById("chartBig1").getContext("2d");
@@ -382,8 +347,8 @@ demo = {
     //     pointBorderColor: 'rgba(255,255,255,0)',
     //     pointHoverBackgroundColor: '#00d6b4',
     //     pointBorderWidth: 20,
-    //     // pointHoverRadius: 4,
-    //     // pointHoverBorderWidth: 15,
+    //     pointHoverRadius: 4,
+    //     pointHoverBorderWidth: 15,
     //     pointRadius: 4,
     //     data: [90, 27, 60, 12, 80],
     //   }]
@@ -401,64 +366,142 @@ demo = {
     // var chart_labels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
     // var chart_data = [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100];
 
+    
+    var ctx = document.getElementById("chartBig1").getContext('2d');
 
-    // var ctx = document.getElementById("chartBig1").getContext('2d');
+    var gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
 
-    // var gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
+    const initializeArrayWithRange = (end, start = 0, step = 1) =>
+      Array.from(
+        { length: Math.ceil((end - start + 1) / step) },
+        (_, i) => i * step + start
+      );
+      chart_labels=initializeArrayWithRange(160)
+      var eth_pred_dataset = JSON.parse(document.getElementById("ethDataPred").dataset.gecode);
+      var eth_act_dataset = JSON.parse(document.getElementById("ethDataAct").dataset.gecode);
+      
+      var btc_pred_dataset = JSON.parse(document.getElementById("btcDataPred").dataset.gecode);
+      var btc_act_dataset = JSON.parse(document.getElementById("btcDataAct").dataset.gecode);
+      
+      var xmr_pred_dataset = JSON.parse(document.getElementById("xmrDataPred").dataset.gecode);
+      var xmr_act_dataset = JSON.parse(document.getElementById("xmrDataAct").dataset.gecode);
+      
+      var dataEth = {
+        labels:chart_labels,
+        datasets: [{
+          label: "dataEthAct",
+          fill: true,
+          backgroundColor: gradientStroke,
+          borderColor: '#d048b6',
+          borderWidth: 2,
+          borderDash: [],
+          borderDashOffset: 0.0,
+          pointBackgroundColor: '#d048b6',
+          pointBorderColor: 'rgba(255,255,255,0)',
+          pointHoverBackgroundColor: '#d048b6',
+          pointBorderWidth: 20,
+          pointHoverRadius: 4,
+          pointHoverBorderWidth: 15,
+          pointRadius: 4,
+          data: eth_act_dataset 
+          
+          }
+        ,{
+          label: "dataA",
+          fill: true,
+          backgroundColor: gradientStroke,
+          borderColor: '#45b1e8 ',
+          borderWidth: 2,
+          borderDash: [],
+          borderDashOffset: 0.0,
+          pointBackgroundColor: '#45b1e8 ',
+          pointBorderColor: 'rgba(72,72,176,0.2)',
+          pointHoverBackgroundColor: '#45b1e8 ',
+          pointBorderWidth: 20,
+          pointHoverRadius: 4,
+          pointHoverBorderWidth: 15,
+          pointRadius: 4,
+          data: eth_pred_dataset
+          
+         }
+      ]
+        
+      };
+      // var dataBtc = {
+      //   labels:chart_labels,
+      //   datasets: [{
+      //     label: "dataBtcAct",
+      //     fill: true,
+      //     backgroundColor: gradientStroke,
+      //     borderColor: '#d048b6',
+      //     borderWidth: 2,
+      //     borderDash: [],
+      //     borderDashOffset: 0.0,
+      //     pointBackgroundColor: '#d048b6',
+      //     pointBorderColor: 'rgba(255,255,255,0)',
+      //     pointHoverBackgroundColor: '#d048b6',
+      //     pointBorderWidth: 20,
+      //     pointHoverRadius: 4,
+      //     pointHoverBorderWidth: 15,
+      //     pointRadius: 4,
+      //     data: btc_act_dataset 
+          
+      //     }
+      //   ,{
+      //     label: "dataA",
+      //     fill: true,
+      //     backgroundColor: gradientStroke,
+      //     borderColor: '#45b1e8 ',
+      //     borderWidth: 2,
+      //     borderDash: [],
+      //     borderDashOffset: 0.0,
+      //     pointBackgroundColor: '#45b1e8 ',
+      //     pointBorderColor: 'rgba(72,72,176,0.2)',
+      //     pointHoverBackgroundColor: '#45b1e8 ',
+      //     pointBorderWidth: 20,
+      //     pointHoverRadius: 4,
+      //     pointHoverBorderWidth: 15,
+      //     pointRadius: 4,
+      //     data: btc_pred_dataset
+          
+      //    }
+      // ]
+        
+      // };
 
-    // gradientStroke.addColorStop(1, 'rgba(72,72,176,0.1)');
-    // gradientStroke.addColorStop(0.4, 'rgba(72,72,176,0.0)');
-    // gradientStroke.addColorStop(0, 'rgba(119,52,169,0)'); //purple colors
-    // var config = {
-    //   type: 'line',
-    //   data: {
-    //     labels: chart_labels,
-    //     datasets: [{
-    //       label: "My First dataset",
-    //       fill: true,
-    //       backgroundColor: gradientStroke,
-    //       borderColor: '#d346b1',
-    //       borderWidth: 2,
-    //       borderDash: [],
-    //       borderDashOffset: 0.0,
-    //       pointBackgroundColor: '#d346b1',
-    //       pointBorderColor: 'rgba(255,255,255,0)',
-    //       pointHoverBackgroundColor: '#d346b1',
-    //       pointBorderWidth: 20,
-    //       // pointHoverRadius: 4,
-    //       // pointHoverBorderWidth: 15,
-    //       pointRadius: 4,
-    //       data: data|tojson,
-    //     }]
-    //   },
-    //   options: gradientChartOptionsConfigurationWithTooltipPurple
-    // };
+    gradientStroke.addColorStop(1, 'rgba(72,72,176,0.1)');
+    gradientStroke.addColorStop(0.4, 'rgba(72,72,176,0.0)');
+    gradientStroke.addColorStop(0, 'rgba(119,52,169,0)'); //purple colors
+    var config = {
+      type: 'line',
+      data: dataEth,
+      options: gradientChartOptionsConfigurationWithTooltipPurple
+    };
     
 
-
-    // console.log(dataEth[0]);
-
-    var myChartData = new Chart(ctx, config);
+ 
+    var predictions = new Chart(ctx, config);
     $("#0").click(function() {
-      var data = myChartData.config.data;
-      data.datasets[0].data = chart_data;
+      var data = predictions.config.data;
+      data.datasets[0].data = eth_pred_dataset;
+      data.datasets[1].data = eth_act_dataset;
       data.labels = chart_labels;
-      myChartData.update();
+      predictions.update();
     });
     $("#1").click(function() {
-      var chart_data = [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120];
-      var data = myChartData.config.data;
-      data.datasets[0].data = chart_data;
+      var data = predictions.config.data;
+      data.datasets[0].data = btc_pred_dataset;
+      data.datasets[1].data = btc_act_dataset;
       data.labels = chart_labels;
-      myChartData.update();
+      predictions.update();
     });
 
     $("#2").click(function() {
-      var chart_data = [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130];
-      var data = myChartData.config.data;
-      data.datasets[0].data = chart_data;
+      var data = predictions.config.data;
+      data.datasets[0].data = xmr_pred_dataset;
+      data.datasets[1].data = xmr_act_dataset;
       data.labels = chart_labels;
-      myChartData.update();
+      predictions.update();
     });
 
 
