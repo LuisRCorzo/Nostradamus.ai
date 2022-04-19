@@ -551,8 +551,8 @@ def get_predictions(df):
 
 
 
-    in_window = 30
-    out_window = 60
+    in_window = 35
+    out_window = 14
     test_len = out_window
 
 
@@ -638,21 +638,25 @@ def get_predictions(df):
         
         inputs = tf.keras.layers.Input(shape=(in_window, num_features))
         
-        layer = tf.keras.layers.LSTM(out_window, return_sequences=True)(inputs)
+        layer = tf.keras.layers.LSTM(in_window, return_sequences=False)(inputs)
         
-        layer = tf.keras.layers.LSTM(in_window)(layer)
+        #layer = tf.keras.layers.LSTM(in_window)(layer)
         
+        layer = tf.keras.layers.Dense(in_window)(layer)
+        layer = tf.keras.layers.Dropout(0.5)(layer)
+
         outputs = tf.keras.layers.Dense(out_window)(layer)
         
         model =tf.keras.models.Model(inputs, outputs)
         
         
-        opt = tf.keras.optimizers.Adam(learning_rate=0.001)
+        opt = tf.keras.optimizers.Adam(learning_rate=0.0001)
         #opt = 'Adam'
         #opt = 'sgd'
         
-        loss = tf.keras.losses.Huber() 
+        #loss = tf.keras.losses.Huber() 
         #loss = 'mse'
+        loss = 'msle'
         
         model.compile(optimizer=opt, loss=loss, metrics=['mape'])
         
@@ -663,10 +667,10 @@ def get_predictions(df):
         
     model_dnn = build_model(in_window, out_window, num_features)
 
-    callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
+    callback = tf.keras.callbacks.EarlyStopping(monitor='_val_loss', patience=3)
 
     model_dnn.summary()
-    hist_simple = model_dnn.fit(x_train, y_train, epochs=100, batch_size=8, callbacks=[callback], shuffle=False, validation_data=(x_valid, y_valid))
+    hist_simple = model_dnn.fit(x_train, y_train, epochs=100, batch_size=6, callbacks=[callback], shuffle=False, validation_data=(x_valid, y_valid))
 
     #plt.plot(hist_simple.history['loss'])
     #plt.plot(hist_simple.history['val_loss'])
