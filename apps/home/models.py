@@ -275,85 +275,85 @@ def create_XMR_forecasts(*args, **kwargs):
         db.session.add(row)
         db.session.commit()
 
-@scheduler.task('interval', id='update_daily_values', seconds=5)
-def daily_db_update():
+# @scheduler.task('interval', id='update_daily_values', seconds=5)
+# def daily_db_update():
 
-    with scheduler.app.app_context():
+#     with scheduler.app.app_context():
         
-        api_key='api_key={ea0232c4ea8a3007655f1518de6af8ea6c4a5e546ddf83988ec885db9600a11e}'
-        btcUrl_day='https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=1&'
-        resBTC = requests.get(btcUrl_day+api_key).json()['Data']['Data']
+#         api_key='api_key={ea0232c4ea8a3007655f1518de6af8ea6c4a5e546ddf83988ec885db9600a11e}'
+#         btcUrl_day='https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=1&'
+#         resBTC = requests.get(btcUrl_day+api_key).json()['Data']['Data']
 
-        day_btc = resBTC[1]
+#         day_btc = resBTC[1]
 
-        row1=BTC(time=day_btc['time'],high=day_btc['high'],low=day_btc['low'],open=day_btc['open'],close=day_btc['close'],volumeto=day_btc['volumeto'],volumefrom=day_btc['volumefrom'])
-        db.session.add(row1)
+#         row1=BTC(time=day_btc['time'],high=day_btc['high'],low=day_btc['low'],open=day_btc['open'],close=day_btc['close'],volumeto=day_btc['volumeto'],volumefrom=day_btc['volumefrom'])
+#         db.session.add(row1)
 
-        try:
-            db.session.commit()
-        except exc.SQLAlchemyError:
-            pass
+#         try:
+#             db.session.commit()
+#         except exc.SQLAlchemyError:
+#             pass
 
-        ethUrl_day='https://min-api.cryptocompare.com/data/v2/histoday?fsym=ETH&tsym=USD&&limit=1&'
-        resETH = requests.get(ethUrl_day+api_key).json()['Data']['Data']
+#         ethUrl_day='https://min-api.cryptocompare.com/data/v2/histoday?fsym=ETH&tsym=USD&&limit=1&'
+#         resETH = requests.get(ethUrl_day+api_key).json()['Data']['Data']
 
-        day_eth = resETH[1]
+#         day_eth = resETH[1]
        
-        row2=ETH(time=day_eth['time'],high=day_eth['high'],low=day_eth['low'],open=day_eth['open'],close=day_eth['close'],volumeto=day_eth['volumeto'],volumefrom=day_eth['volumefrom'])
-        db.session.add(row2)
+#         row2=ETH(time=day_eth['time'],high=day_eth['high'],low=day_eth['low'],open=day_eth['open'],close=day_eth['close'],volumeto=day_eth['volumeto'],volumefrom=day_eth['volumefrom'])
+#         db.session.add(row2)
 
-        try:
-            db.session.commit()
-        except exc.SQLAlchemyError:
-            pass 
+#         try:
+#             db.session.commit()
+#         except exc.SQLAlchemyError:
+#             pass 
        
 
-        xmrUrl_day='https://min-api.cryptocompare.com/data/v2/histoday?fsym=XMR&tsym=USD&&limit=1&'
-        resXMR = requests.get(xmrUrl_day+api_key).json()['Data']['Data']
+#         xmrUrl_day='https://min-api.cryptocompare.com/data/v2/histoday?fsym=XMR&tsym=USD&&limit=1&'
+#         resXMR = requests.get(xmrUrl_day+api_key).json()['Data']['Data']
 
-        day_xmr = resXMR[1]
+#         day_xmr = resXMR[1]
         
-        row3=XMR(time=day_xmr['time'],high=day_xmr['high'],low=day_xmr['low'],open=day_xmr['open'],close=day_xmr['close'],volumeto=day_xmr['volumeto'],volumefrom=day_xmr['volumefrom'])
-        db.session.add(row3)
-        try:
-            db.session.commit()
-        except exc.SQLAlchemyError:
-            pass 
+#         row3=XMR(time=day_xmr['time'],high=day_xmr['high'],low=day_xmr['low'],open=day_xmr['open'],close=day_xmr['close'],volumeto=day_xmr['volumeto'],volumefrom=day_xmr['volumefrom'])
+#         db.session.add(row3)
+#         try:
+#             db.session.commit()
+#         except exc.SQLAlchemyError:
+#             pass 
 
 
-@scheduler.task('interval', id='make_weekly_predictions', weeks=1)
-def daily_db_update():
+# @scheduler.task('interval', id='make_weekly_predictions', weeks=1)
+# def daily_db_update():
 
-    with scheduler.app.app_context():
-        btc=BTC.query.all()
-        btc=pd.DataFrame(BTC.toDICT(btc))
-        btc_preds = get_predictions(btc)
+#     with scheduler.app.app_context():
+#         btc=BTC.query.all()
+#         btc=pd.DataFrame(BTC.toDICT(btc))
+#         btc_preds = get_predictions(btc)
         
-        for days in btc_preds:
-            row=BTC_forecasts(close=days)
-            db.session.add(row)
-            db.session.commit()
+#         for days in btc_preds:
+#             row=BTC_forecasts(close=days)
+#             db.session.add(row)
+#             db.session.commit()
         
-        eth=ETH.query.all()
-        eth=pd.DataFrame(ETH.toDICT(eth))
+#         eth=ETH.query.all()
+#         eth=pd.DataFrame(ETH.toDICT(eth))
 
-        eth_preds = get_predictions(eth)
+#         eth_preds = get_predictions(eth)
 
-        for days in eth_preds:
-            row=ETH_forecasts(close=days)
-            db.session.add(row)
-            db.session.commit()
+#         for days in eth_preds:
+#             row=ETH_forecasts(close=days)
+#             db.session.add(row)
+#             db.session.commit()
 
 
-        xmr=XMR.query.all()
-        xmr=pd.DataFrame(XMR.toDICT(xmr))
+#         xmr=XMR.query.all()
+#         xmr=pd.DataFrame(XMR.toDICT(xmr))
 
-        xmr_preds = get_predictions(xmr)
+#         xmr_preds = get_predictions(xmr)
 
-        for days in xmr_preds:
-            row=XMR_forecasts(close=days)
-            db.session.add(row)
-            db.session.commit()
+#         for days in xmr_preds:
+#             row=XMR_forecasts(close=days)
+#             db.session.add(row)
+#             db.session.commit()
 
 def toDICT(rset):
     result = defaultdict(list)
@@ -381,7 +381,7 @@ def get_eth_data():
 
 
     eth_df = pd.DataFrame(ETH.toDICT(eth))
-    start = len(eth_df)-100
+    start = len(eth_df)-45
 
     eth_df = eth_df[['close']]
     eth_actual = (eth_df.iloc[start:,].values.ravel()).tolist()
@@ -414,7 +414,7 @@ def get_btc_data():
 
 
     btc_df = pd.DataFrame(BTC.toDICT(btc))
-    start = len(btc_df)-100
+    start = len(btc_df)-45
 
     btc_df = btc_df[['close']]
     btc_actual = (btc_df.iloc[start:,].values.ravel()).tolist()
@@ -447,7 +447,7 @@ def get_xmr_data():
 
 
     xmr_df = pd.DataFrame(XMR.toDICT(xmr))
-    start = len(xmr_df)-100
+    start = len(xmr_df)-45
 
     xmr_df = xmr_df[['close']]
     xmr_actual = (xmr_df.iloc[start:,].values.ravel()).tolist()
@@ -528,11 +528,11 @@ def get_predictions(df):
     rsi = rsi[start:end]
     MACD = MACD[start:end]
 
-    data_df = data_df.assign(ichimoku_span_a=span_a)
-    data_df = data_df.assign(ichimoku_span_b=span_b)
+    #data_df = data_df.assign(ichimoku_span_a=span_a)
+    #data_df = data_df.assign(ichimoku_span_b=span_b)
 
-    data_df = data_df.assign(bollinger_high=bollinger_high)
-    data_df = data_df.assign(bollinger_low=bollinger_low)
+    #data_df = data_df.assign(bollinger_high=bollinger_high)
+    #data_df = data_df.assign(bollinger_low=bollinger_low)
 
     data_df = data_df.assign(hull=HULL)
 
@@ -551,8 +551,8 @@ def get_predictions(df):
 
 
 
-    in_window = 30
-    out_window = 60
+    in_window = 35
+    out_window = 14
     test_len = out_window
 
 
@@ -638,21 +638,22 @@ def get_predictions(df):
         
         inputs = tf.keras.layers.Input(shape=(in_window, num_features))
         
-        layer = tf.keras.layers.LSTM(out_window, return_sequences=True)(inputs)
+        layer = tf.keras.layers.LSTM(out_window+5, return_sequences=False)(inputs)
         
-        layer = tf.keras.layers.LSTM(in_window)(layer)
-        
+        #layer = tf.keras.layers.LSTM(in_window)(layer)
+        layer = tf.keras.layers.Dense(out_window+10)(layer)
+        layer = tf.keras.layers.Dropout(0.3)(layer)
         outputs = tf.keras.layers.Dense(out_window)(layer)
         
         model =tf.keras.models.Model(inputs, outputs)
         
         
-        opt = tf.keras.optimizers.Adam(learning_rate=0.001)
+        opt = tf.keras.optimizers.Adam(learning_rate=0.0001)
         #opt = 'Adam'
         #opt = 'sgd'
         
-        loss = tf.keras.losses.Huber() 
-        #loss = 'mse'
+        #loss = tf.keras.losses.Huber() 
+        loss = 'mse'
         
         model.compile(optimizer=opt, loss=loss, metrics=['mape'])
         
@@ -666,7 +667,7 @@ def get_predictions(df):
     callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
 
     model_dnn.summary()
-    hist_simple = model_dnn.fit(x_train, y_train, epochs=100, batch_size=8, callbacks=[callback], shuffle=False, validation_data=(x_valid, y_valid))
+    hist_simple = model_dnn.fit(x_train, y_train, epochs=40, batch_size=7, callbacks=[callback], shuffle=False, validation_data=(x_valid, y_valid))
 
     #plt.plot(hist_simple.history['loss'])
     #plt.plot(hist_simple.history['val_loss'])
