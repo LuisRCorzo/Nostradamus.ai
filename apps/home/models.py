@@ -667,7 +667,7 @@ def get_predictions(df):
         
     model_dnn = build_model(in_window, out_window, num_features)
 
-    callback = tf.keras.callbacks.EarlyStopping(monitor='_val_loss', patience=3)
+    callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=3)
 
     model_dnn.summary()
     hist_simple = model_dnn.fit(x_train, y_train, epochs=100, batch_size=6, callbacks=[callback], shuffle=False, validation_data=(x_valid, y_valid))
