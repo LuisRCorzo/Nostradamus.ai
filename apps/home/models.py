@@ -449,7 +449,7 @@ def get_xmr_data():
     xmr_df = pd.DataFrame(XMR.toDICT(xmr))
     start = len(xmr_df)-45
 
-    xmr_df = xmr_df[['close']]
+    xmr_df =  xmr_df[['close']]
     xmr_actual = (xmr_df.iloc[start:,].values.ravel()).tolist()
 
     idx_actual = [i for i in range(0, len(xmr_actual))]

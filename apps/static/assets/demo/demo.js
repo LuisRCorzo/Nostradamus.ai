@@ -124,7 +124,7 @@ demo = {
         intersect: 0,
         position: "nearest"
       },
-      responsive: true,
+      responsive: true ,
       scales: {
         yAxes: [{
           barPercentage: 1.6,
