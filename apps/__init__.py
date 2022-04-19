@@ -7,16 +7,17 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from importlib import import_module
-
+from flask_apscheduler import APScheduler
 
 db = SQLAlchemy()
 login_manager = LoginManager()
-
+scheduler = APScheduler()
 
 def register_extensions(app):
     db.init_app(app)
     login_manager.init_app(app)
-
+    scheduler.init_app(app)
+    scheduler.start()
 
 def register_blueprints(app):
     for module_name in ('authentication', 'home'):

@@ -9,13 +9,13 @@ import json
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import inspect, event
+from sqlalchemy import inspect, event,exc
 from collections import defaultdict
 
 import pandas as pd
 
 
-from apps import db
+from apps import db,scheduler
 
 import requests
 
@@ -275,7 +275,85 @@ def create_XMR_forecasts(*args, **kwargs):
         db.session.add(row)
         db.session.commit()
 
+@scheduler.task('interval', id='update_daily_values', seconds=5)
+def daily_db_update():
 
+    with scheduler.app.app_context():
+        
+        api_key='api_key={ea0232c4ea8a3007655f1518de6af8ea6c4a5e546ddf83988ec885db9600a11e}'
+        btcUrl_day='https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=1&'
+        resBTC = requests.get(btcUrl_day+api_key).json()['Data']['Data']
+
+        day_btc = resBTC[1]
+
+        row1=BTC(time=day_btc['time'],high=day_btc['high'],low=day_btc['low'],open=day_btc['open'],close=day_btc['close'],volumeto=day_btc['volumeto'],volumefrom=day_btc['volumefrom'])
+        db.session.add(row1)
+
+        try:
+            db.session.commit()
+        except exc.SQLAlchemyError:
+            pass
+
+        ethUrl_day='https://min-api.cryptocompare.com/data/v2/histoday?fsym=ETH&tsym=USD&&limit=1&'
+        resETH = requests.get(ethUrl_day+api_key).json()['Data']['Data']
+
+        day_eth = resETH[1]
+       
+        row2=ETH(time=day_eth['time'],high=day_eth['high'],low=day_eth['low'],open=day_eth['open'],close=day_eth['close'],volumeto=day_eth['volumeto'],volumefrom=day_eth['volumefrom'])
+        db.session.add(row2)
+
+        try:
+            db.session.commit()
+        except exc.SQLAlchemyError:
+            pass 
+       
+
+        xmrUrl_day='https://min-api.cryptocompare.com/data/v2/histoday?fsym=XMR&tsym=USD&&limit=1&'
+        resXMR = requests.get(xmrUrl_day+api_key).json()['Data']['Data']
+
+        day_xmr = resXMR[1]
+        
+        row3=XMR(time=day_xmr['time'],high=day_xmr['high'],low=day_xmr['low'],open=day_xmr['open'],close=day_xmr['close'],volumeto=day_xmr['volumeto'],volumefrom=day_xmr['volumefrom'])
+        db.session.add(row3)
+        try:
+            db.session.commit()
+        except exc.SQLAlchemyError:
+            pass 
+
+
+@scheduler.task('interval', id='make_weekly_predictions', weeks=1)
+def daily_db_update():
+
+    with scheduler.app.app_context():
+        btc=BTC.query.all()
+        btc=pd.DataFrame(BTC.toDICT(btc))
+        btc_preds = get_predictions(btc)
+        
+        for days in btc_preds:
+            row=BTC_forecasts(close=days)
+            db.session.add(row)
+            db.session.commit()
+        
+        eth=ETH.query.all()
+        eth=pd.DataFrame(ETH.toDICT(eth))
+
+        eth_preds = get_predictions(eth)
+
+        for days in eth_preds:
+            row=ETH_forecasts(close=days)
+            db.session.add(row)
+            db.session.commit()
+
+
+        xmr=XMR.query.all()
+        xmr=pd.DataFrame(XMR.toDICT(xmr))
+
+        xmr_preds = get_predictions(xmr)
+
+        for days in xmr_preds:
+            row=XMR_forecasts(close=days)
+            db.session.add(row)
+            db.session.commit()
 
 def toDICT(rset):
     result = defaultdict(list)
