@@ -3,18 +3,58 @@
     <div class="sidebar">
       <div class="sidebar-wrapper">
         <div class="logo">
-          <a target="_blank" rel="sponsored noopener noreferrer" 
-             href="https://appseed.us/admin-dashboards/flask-dashboard-black" class="simple-text logo-mini">
-            PI
+          <a target="_blank" rel="sponsored noopener noreferrer" href="/index" class="simple-text logo-mini">
+              
           </a>
-          <a target="_blank" rel="sponsored noopener noreferrer" 
-             href="https://appseed.us/admin-dashboards/flask-dashboard-black" class="simple-text logo-normal">
-            Flask Black
+          <a target="_blank" rel="sponsored noopener noreferrer" href="/index" class="simple-text logo-normal">
+              NOSTRADAMUS.AI
           </a>
-        </div>
+          </div>
+
 
         <ul class="nav">
-        {% if current_user.is_authenticated %}
+          {% if current_user.is_authenticated %}
+
+
+          <!-- <li class=" active ">
+              <a href="/">
+              <i class="tim-icons icon-chart-pie-36"></i>
+              <p>Home</p>
+              </a>
+          </li> -->
+          <li class=" active ">
+            <a href="/">
+            <i class="tim-icons icon-chart-pie-36"></i>
+            <p>Dashboard</p>
+            </a>
+        </li>
+          
+          
+          
+          <li class="">
+              <a href="/page-user.html">
+              <i class="tim-icons icon-single-02"></i>
+              <p>User Profile</p>
+              </a>
+          </li>
+          
+          
+          
+          <li class="">
+              <a href="/page-user.html">
+              <i class="tim-icons icon-app"></i>
+              <p>About</p>
+              </a>
+          </li><li>
+              <a href="/logout">
+              <i class="tim-icons icon-button-power"></i>
+              <p>Logout</p>
+              </a>
+          </li>
+          
+                      
+          </ul>
+        <!-- <ul class="nav">
 
           <li class="{% if 'index' in segment %} active {% endif %}">
             <a href="/">
@@ -80,7 +120,7 @@
           </li>   
           {% endif %}
                     
-        </ul>
+        </ul> -->
         
       </div>
     </div>

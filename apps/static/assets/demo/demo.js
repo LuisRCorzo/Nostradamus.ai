@@ -371,6 +371,29 @@ demo = {
 
     var gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
 
+    const getDatesBetweenDates = (startDate, endDate) => {
+      let dates = []
+      //to avoid modifying the original date
+      const theDate = new Date(startDate)
+      while (theDate < endDate) {
+        add=new Date(theDate)
+        month=String(add.getMonth()+1)
+        day=String(add.getDate())
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+        dates = [...dates, day +'/'+month]
+        theDate.setDate(theDate.getDate() + 1)
+      }
+      return dates
+    }
+    const today = new Date()
+    // console.log(today)
+    today.setDate(today.getDate()-46)
+    console.log(today)
+    const sixtydayrange = new Date(today)
+    sixtydayrange.setDate( sixtydayrange.getDate() + 60)
+
+    dates=getDatesBetweenDates(today, sixtydayrange)
     const initializeArrayWithRange = (end, start = 0, step = 1) =>
       Array.from(
         { length: Math.ceil((end - start + 1) / step) },
