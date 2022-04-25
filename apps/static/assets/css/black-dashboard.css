@@ -1479,7 +1479,8 @@ textarea.form-control {
   height: auto; }
 
 .form-group {
-  margin-bottom: 1rem; }
+  margin-bottom: 1rem;
+ }
 
 .form-text {
   display: block;
@@ -1798,24 +1799,24 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #ffffff;
-  background-color: #e14eca;
-  border-color: #e14eca;
+  background-color: #16578b;
+  border-color: #16578b;
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08); }
   .btn-primary:hover {
     color: #ffffff;
-    background-color: #db2dc0;
-    border-color: #d725bb; }
+    background-color: #16578b;
+    border-color: #16578b; }
   .btn-primary:focus, .btn-primary.focus {
     box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08), 0 0 0 0 rgba(230, 105, 210, 0.5); }
   .btn-primary.disabled, .btn-primary:disabled {
     color: #ffffff;
-    background-color: #e14eca;
-    border-color: #e14eca; }
+    background-color: #16578b;
+    border-color: #16578b; }
   .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
   .show > .btn-primary.dropdown-toggle {
     color: #ffffff;
-    background-color: #d725bb;
-    border-color: #cd23b2; }
+    background-color: #16578b;
+    border-color: #16578b; }
     .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
     .show > .btn-primary.dropdown-toggle:focus {
       box-shadow: 0 0 0 0 rgba(230, 105, 210, 0.5); }
@@ -2085,22 +2086,22 @@ fieldset:disabled a.btn {
       box-shadow: 0 0 0 0 rgba(38, 38, 38, 0.5); }
 
 .btn-outline-primary {
-  color: #e14eca;
-  border-color: #e14eca; }
+  color: #16578b;
+  border-color: #16578b; }
   .btn-outline-primary:hover {
     color: #ffffff;
-    background-color: #e14eca;
-    border-color: #e14eca; }
+    background-color: #16578b;
+    border-color: #16578b; }
   .btn-outline-primary:focus, .btn-outline-primary.focus {
     box-shadow: 0 0 0 0 rgba(225, 78, 202, 0.5); }
   .btn-outline-primary.disabled, .btn-outline-primary:disabled {
-    color: #e14eca;
+    color: #16578b;
     background-color: transparent; }
   .btn-outline-primary:not(:disabled):not(.disabled):active, .btn-outline-primary:not(:disabled):not(.disabled).active,
   .show > .btn-outline-primary.dropdown-toggle {
     color: #ffffff;
-    background-color: #e14eca;
-    border-color: #e14eca; }
+    background-color: #16578b;
+    border-color: #16578b; }
     .btn-outline-primary:not(:disabled):not(.disabled):active:focus, .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
     .show > .btn-outline-primary.dropdown-toggle:focus {
       box-shadow: 0 0 0 0 rgba(225, 78, 202, 0.5); }
@@ -2338,7 +2339,7 @@ fieldset:disabled a.btn {
 
 .btn-link {
   font-weight: 400;
-  color: #e14eca;
+  color: #16578b;
   text-decoration: none; }
   .btn-link:hover {
     color: #c221a9;
@@ -3499,7 +3500,7 @@ input[type="button"].btn-block {
       color: rgba(255, 255, 255, 0.65); }
 
 .card {
-  position: relative;
+  position: center;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -3507,7 +3508,9 @@ input[type="button"].btn-block {
   background-color: #ffffff;
   background-clip: border-box;
   border: 0.0625rem solid rgba(34, 42, 66, 0.05);
-  border-radius: 0.2857rem; }
+  border-radius: 0.2857rem;
+  text-align: center;
+ }
   .card > hr {
     margin-right: 0;
     margin-left: 0; }
@@ -3516,7 +3519,9 @@ input[type="button"].btn-block {
     border-top-right-radius: 0.2857rem; }
   .card > .list-group:last-child .list-group-item:last-child {
     border-bottom-right-radius: 0.2857rem;
-    border-bottom-left-radius: 0.2857rem; }
+    border-bottom-left-radius: 0.2857rem; 
+  }
+  
   
 
 .card-body {
@@ -3526,6 +3531,12 @@ input[type="button"].btn-block {
 .card-title {
   margin-bottom: 1.25rem; 
   padding: 1.5rem;}
+
+.card-title-main {
+  margin-bottom: 1.25rem; 
+  padding: 1.5rem;
+  text-align:center;
+}
 
 .card-subtitle {
   margin-top: -0.625rem;
@@ -3553,10 +3564,13 @@ input[type="button"].btn-block {
 .card-footer {
   padding: 1.25rem 1.5rem;
   background-color: #f6f9fc;
-  border-top: 0.0625rem solid rgba(34, 42, 66, 0.05); }
+  border-top: 0.0625rem solid rgba(34, 42, 66, 0.05);
+  text-align: center;
+ }
   .card-footer:last-child {
     border-radius: 0 0 calc(0.2857rem - 0.0625rem) calc(0.2857rem - 0.0625rem); }
 
+    
 .card-header-tabs {
   margin-right: -0.75rem;
   margin-bottom: -1.25rem;

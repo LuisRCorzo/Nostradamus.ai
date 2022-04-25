@@ -1,0 +1,27 @@
+{% extends "layouts/base-main.html" %}
+
+{% block title %} Login {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title-main" >Nostradamus.ai</h2>
+            </div>
+            <div class="card-footer">
+                    <button onclick="location.href = '/login';" name="login" class="btn btn-fill btn-primary" >Login</button>
+                Don't have an account? <a href="/register" class="text-primary">Create</a>
+              </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
