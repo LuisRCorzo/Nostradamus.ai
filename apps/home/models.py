@@ -479,9 +479,8 @@ def get_xmr_data():
 def get_predictions(df):
 
     import numpy as np
-    #import matplotlib.pyplot as plt
     import ta
-    from sklearn.preprocessing import MinMaxScaler, StandardScaler
+    from sklearn.preprocessing import StandardScaler
     from sklearn.feature_selection import SelectKBest, f_regression
     from sklearn.metrics import f1_score, mean_squared_error, mean_absolute_error, mean_squared_log_error, mean_absolute_percentage_error
     import tensorflow as tf
@@ -495,6 +494,7 @@ def get_predictions(df):
     high = data_df.high
     low = data_df.low
     close = data_df.close
+    volume = data_df.volumeto
 
     start = 0
     end = len(data_df)
@@ -503,49 +503,50 @@ def get_predictions(df):
     x_axis = [i for i in range(start,len(data_df))]
 
 
-    ichimoku = ta.trend.IchimokuIndicator(high, low)
-    span_a = ichimoku.ichimoku_a()
-    span_b = ichimoku.ichimoku_b()
-
-    RSI = ta.momentum.RSIIndicator(close)
-    rsi = RSI.rsi()
+    RSI = ta.momentum.StochRSIIndicator(close)
+    rsi_k = RSI.stochrsi_k()
+    rsi_d = RSI.stochrsi_d()
 
     MACD_indicator = ta.trend.MACD(close)
-    MACD = MACD_indicator.macd_diff()
+    macd = MACD_indicator.macd_diff()
 
-    bollinger_indicator = ta.volatility.BollingerBands(close)
-    bollinger_high = bollinger_indicator.bollinger_hband()
-    bollinger_low = bollinger_indicator.bollinger_lband()
+    KD = ta.momentum.StochasticOscillator(close, high, low)
+    kd = KD.stoch()
 
-    wma1 = ta.trend.wma_indicator(close,18)
-    wma2 = ta.trend.wma_indicator(close,36)
-    hull_inp = (2*(wma1))-wma2
-    HULL = ta.trend.wma_indicator(hull_inp,6)
+    OBV = ta.volume.OnBalanceVolumeIndicator(close, volume)
+    obv = OBV.on_balance_volume()
 
-    x_axis = x_axis[start:end]
-    close = close[start:end]
+    atr = ta.volatility.average_true_range(high, low, close)
 
-    span_a = span_a[start:end]
-    span_b = span_b[start:end]
-
-    rsi = rsi[start:end]
-    MACD = MACD[start:end]
-
-    #data_df = data_df.assign(ichimoku_span_a=span_a)
-    #data_df = data_df.assign(ichimoku_span_b=span_b)
-
-    #data_df = data_df.assign(bollinger_high=bollinger_high)
-    #data_df = data_df.assign(bollinger_low=bollinger_low)
-
-    data_df = data_df.assign(hull=HULL)
-
-    data_df = data_df.assign(RSI=rsi)
-    data_df = data_df.assign(MACD=MACD)
+    data_df = data_df.assign(rsi_k=rsi_k)
+    data_df = data_df.assign(rsi_d=rsi_d)
+    data_df = data_df.assign(macd=macd)
+    data_df = data_df.assign(kd=kd)
+    data_df = data_df.assign(obv=obv)
+    data_df = data_df.assign(atr=atr)
 
     data_df = data_df.dropna()
     data_df = data_df.reset_index(drop=True)
 
-    #data_df = data_df.drop(columns=['ichimoku_span_a','ichimoku_span_b','bollinger_high','bollinger_low','RSI','MACD'])
+    data_df = data_df.drop(columns=['volumeto'])
+    
+    x = len(data_df)%8
+    n = len(data_df)-x
+
+
+    temporal = [[0,1,0,1,0,1,0,1] for i in range(0,n,8)]
+
+    temporal = np.asarray(temporal).ravel().tolist()
+
+    for i in range(0,x):
+        
+        if i < 4:
+            temporal.append(0)
+        else:
+            temporal.append(1)
+   
+
+    data_df = data_df.assign(time=temporal)
 
 
     #-------------------------------------------------------------------------------------------------------------------------
@@ -554,7 +555,7 @@ def get_predictions(df):
 
 
 
-    in_window = 35
+    in_window = 70
     out_window = 14
     test_len = out_window
 
@@ -641,22 +642,22 @@ def get_predictions(df):
         
         inputs = tf.keras.layers.Input(shape=(in_window, num_features))
         
-        layer = tf.keras.layers.LSTM(out_window+5, return_sequences=False)(inputs)
+        layer = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(64, return_sequences=False))(inputs)
         
-        #layer = tf.keras.layers.LSTM(in_window)(layer)
-        layer = tf.keras.layers.Dense(out_window+10)(layer)
-        layer = tf.keras.layers.Dropout(0.3)(layer)
+        layer =  tf.keras.layers.Dense(32, kernel_initializer='lecun_normal', activation='selu')(layer)
+
+        layer =  tf.keras.layers.Dropout(0.4)(layer)
+
         outputs = tf.keras.layers.Dense(out_window)(layer)
         
         model =tf.keras.models.Model(inputs, outputs)
         
-        
-        opt = tf.keras.optimizers.Adam(learning_rate=0.0001)
-        #opt = 'Adam'
-        #opt = 'sgd'
+   
+        #opt = tf.keras.optimizers.Adam(learning_rate=0.0001)
+        opt = 'sgd'
         
         #loss = tf.keras.losses.Huber() 
-        loss = 'mse'
+        loss = 'mean_squared_error'
         
         model.compile(optimizer=opt, loss=loss, metrics=['mape'])
         
@@ -667,18 +668,11 @@ def get_predictions(df):
         
     model_dnn = build_model(in_window, out_window, num_features)
 
-    callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
+    callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=7)
 
     model_dnn.summary()
-    hist_simple = model_dnn.fit(x_train, y_train, epochs=40, batch_size=7, callbacks=[callback], shuffle=False, validation_data=(x_valid, y_valid))
+    hist_simple = model_dnn.fit(x_train, y_train, epochs=80, batch_size=8, callbacks=[callback], shuffle=False, validation_data=(x_valid, y_valid))
 
-    #plt.plot(hist_simple.history['loss'])
-    #plt.plot(hist_simple.history['val_loss'])
-    #plt.title('model loss')
-    #plt.ylabel('loss')
-    #plt.xlabel('epoch')
-    #plt.legend(['train', 'val'], loc='upper left')
-    #plt.show()
 
     y_pred = model_dnn.predict(x_test)
 
@@ -691,87 +685,5 @@ def get_predictions(df):
     y_pred = sc2.inverse_transform(y_pred)
     
 
-    '''
-    for i in range(train_len,dataset_len-out_window):
-        
-        
-        width = .89
-        width2 = .12
-
-        training_df = data_df.iloc[i-70:i,:]
-        up = training_df[training_df.close>= training_df.open]
-        down = training_df[training_df.close< training_df.open]
-
-        
-        actual_df = data_df.iloc[i:i+out_window,:]
-        up_actual = actual_df[actual_df.close >= actual_df.open]
-        down_actual = actual_df[actual_df.close < actual_df.open]
-        
-        
-        pred_df = pd.DataFrame(y_pred[i-train_len,:])
-        pred_df.columns=['Pred']
-        pred_df = pred_df.set_index(actual_df.index)
-        
-        
-        
-        print("MAE: ", mean_absolute_error(actual_df.close, y_pred[i-train_len,:]))
-        print("MAPE: ", mean_absolute_percentage_error(actual_df.close, y_pred[i-train_len,:]))
-        
-        
-        #plotting predictions 
-        ylim_high = actual_df.high.max()
-        ylim_low = actual_df.low.min()
-        
-        ylim_high2 = training_df.high.max()
-        ylim_low2 = training_df.low.min()
-        
-        if ylim_high < ylim_high2:
-            ylim_high = ylim_high2
-        
-        if ylim_low > ylim_low2:
-            ylim_low = ylim_low2
-            
-            
-        #define colors to use
-        col1 = 'green'
-        col2 = 'red'
-    
-        plt.figure(figsize=(15, 9))
-        
-        #plot up prices
-        plt.bar(up.index, up.close-up.open, width, bottom=up.open, color=col1,)
-        plt.bar(up.index, up.high-up.close, width2, bottom=up.close, color=col1)
-        plt.bar(up.index, up.low-up.open, width2, bottom=up.open, color=col1)
-
-        #plot down prices
-        plt.bar(down.index, down.close-down.open, width, bottom=down.open, color=col2)
-        plt.bar(down.index, down.high-down.open, width2, bottom=down.open, color=col2)
-        plt.bar(down.index, down.low-down.close, width2, bottom=down.close, color=col2)
-        
-        plt.bar(up_actual.index, up_actual.close-up_actual.open, width, bottom=up_actual.open, color=col1, alpha=0.6)
-        plt.bar(up_actual.index, up_actual.high-up_actual.close, width2, bottom=up_actual.close, color=col1, alpha=0.6)
-        plt.bar(up_actual.index, up_actual.low-up_actual.open, width2, bottom=up_actual.open, color=col1, alpha=0.6)
-
-        plt.bar(down_actual.index, down_actual.close-down_actual.open,width, bottom=down_actual.open, color=col2, alpha=0.6)
-        plt.bar(down_actual.index, down_actual.high-down_actual.open, width2, bottom=down_actual.open, color=col2, alpha=0.6)
-        plt.bar(down_actual.index, down_actual.low-down_actual.close, width2, bottom=down_actual.close, color=col2, alpha=0.6)
-        
-        
-        pred_to_plot = np.insert(pred_df['Pred'].values,0,data_df.iloc[i,3])
-        
-        plot_start = data_df.loc[i].name
-        
-        plot_idx = [i for i in range(plot_start, plot_start+out_window+1)]
-        
-        plt.plot(plot_idx,pred_to_plot,color='purple')
-        
-        #plt.ylim(ylim_low-10, ylim_high+10)
-        
-        #rotate x-axis tick labels
-        plt.xticks(rotation=45, ha='right')
-
-        #display candlestick chart
-        plt.show()
-    '''
     y_pred = y_pred[0]
     return y_pred
