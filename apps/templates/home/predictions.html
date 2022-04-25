@@ -12,10 +12,22 @@
         <div class="card card-chart">
             <div class="card-header ">
                 <div class="row">
-                        <h2 class="card-title" id="aboutNostr">What is Nostradamus.ai</h2>
+                        <h1 class="card-title" id="aboutNostr"> The Neural Network</h1>
                         <div class="card">
-                            <h5 class="card-category">Machine Learning</h5>
-                            <h5 class="card-body">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</h5>
+                           
+                            <h2 class="card-body">    -  Deep neural network architecture: </h2>
+                            <h4 class="card-body">  
+                                <p>We tried several architectures including a vanilla LSTM, an encoder-decoder, and an encoder-decoder with luong attention. Nonetheless, the following network was the one which appeared to be more consistent and robust to unseen data.</p>
+                                Our neural network to be tested consists of a Biderectional LSTM layer with 64 hidden units; a Dense layer layer with 32 hidden units, using SELU activations and Lecun-normal kernel initilizer, which is connected to a dropout layer; and a Dense output layer, with 14 units and linear acivations.
+                                
+                            </h4>
+                            <br>
+                            <h2 class="card-body">   -  Bidirectional LSTM, SELU activations, Dropout and Early Stopping:  </h2>
+                      
+                            <h4 class="card-body"> LSTM networks are recurrent neural networks that remember past information through the use of hidden states from previous time steps. Now, a Bidirectional LSTM is simply two LSTM layers connected together, where the input sequence is also passed in reverse. We are using a Biderectional LSTM layer over a simple LSTM layer because the former remembers not only the past information in relaation to the present-future, but also future information in relation to the past. </h4>
+                            <h4 class="card-body"> The use of SELU activation functions helps us completely avoid the problem of exploding and vanishing gradients.</h4>
+                            <h4 class="card-body"> Dropout helps with model robustness when encountering unseen data. Alpha Dropout should be used when using SELU activation functions, but normal Dropout seemed to be more consistent throughout our experimentation. The use of Early stopping is important for managing overfitting during atomated training jobs.</h4>
+                        
                         </div>
                 </div>  
             </div>
