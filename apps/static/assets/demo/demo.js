@@ -416,16 +416,16 @@ demo = {
           fill: true,
           backgroundColor: gradientStroke,
           borderColor: '#d048b6',
-          borderWidth: 2,
+          borderWidth: 2.2,
           borderDash: [],
           borderDashOffset: 0.0,
           pointBackgroundColor: '#d048b6',
-          pointBorderColor: 'rgba(255,255,255,0)',
+          pointBorderColor: 'rgba(255,66,255,0.11)',
           pointHoverBackgroundColor: '#d048b6',
-          pointBorderWidth: 20,
-          pointHoverRadius: 4,
+          pointBorderWidth: 18,
+          pointHoverRadius: 3,
           pointHoverBorderWidth: 15,
-          pointRadius: 4,
+          pointRadius: 2.3,
           data:eth_pred_dataset  
           
           }
@@ -434,16 +434,16 @@ demo = {
           fill: true,
           backgroundColor: gradientStroke,
           borderColor: '#45b1e8 ',
-          borderWidth: 2,
+          borderWidth: 2.2,
           borderDash: [],
           borderDashOffset: 0.0,
           pointBackgroundColor: '#45b1e8 ',
-          pointBorderColor: 'rgba(72,72,176,0.2)',
+          pointBorderColor: 'rgba(72,72,176,0.24)',
           pointHoverBackgroundColor: '#45b1e8 ',
-          pointBorderWidth: 20,
-          pointHoverRadius: 4,
+          pointBorderWidth: 18,
+          pointHoverRadius: 3,
           pointHoverBorderWidth: 15,
-          pointRadius: 4,
+          pointRadius: 2.3,
           data: eth_act_dataset
           
          }
