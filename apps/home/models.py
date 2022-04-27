@@ -275,13 +275,8 @@ def create_XMR_forecasts(*args, **kwargs):
         db.session.add(row)
         db.session.commit()
 
-<<<<<<< Updated upstream
 # @scheduler.task('interval', id='update_daily_values', seconds=5)
 # def daily_db_update():
-=======
-@scheduler.task('interval', id='update_daily_values', hours=24)
-def daily_db_update():
->>>>>>> Stashed changes
 
 #     with scheduler.app.app_context():
         
